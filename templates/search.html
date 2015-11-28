@@ -2,20 +2,24 @@
 <html>
 
 <head>
-  <title>Recipe Master</title>
-  <link href="site.css" rel="stylesheet">
+    <title>Recipe Master</title>
+    <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='site.css') }}">
 </head>
 
 <body>
-  <nav id="navbar"></nav>
+    <nav id="navbar"></nav>
 
-  <div id="main">
-  <h1>Recipe Master</h1>
-  <p>SEARCH RECIPES</p>
+    <div id="main">
+    <h1>Recipe Master</h1>
+    <p>SEARCH RECIPES</p>
+    <form method="post" id="search_box" class='search'>
+        <p>Keywords: <input type="text" name="general" id="general" placeholder="anything"></p>
+        <p>Diet: <input type="text" name="diet" id="diet" placeholder="any diet"></p>
+        <input type="Submit" value="Search" name="Search">
+    </form>
+    <footer id="footer"></footer>
+    </div>
 
-  <footer id="footer"></footer>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
