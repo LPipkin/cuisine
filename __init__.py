@@ -15,7 +15,7 @@ def my_link():
                         cursorclass=MySQLdb.cursors.DictCursor)
     cursor = db.cursor()
     diet = "3"
-    cursor.execute("""SELECT * FROM Diets WHERE dietID=%s""", (diet))
+    cursor.execute("""SELECT * FROM Diets WHERE dietID='{0}'""".format(diet))
     rv = cursor.fetchall()
     db.close()
     return rv[0]['name']
@@ -39,7 +39,7 @@ def view(rec_id):
     db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
                         cursorclass=MySQLdb.cursors.DictCursor)
     cursor = db.cursor()
-    cursor.execute("""SELECT * FROM Recipes WHERE recipeID=%s""", (rec_id))
+    cursor.execute("""SELECT * FROM Recipes WHERE recipeID='{0}'""".format(rec_id))
     rv = cursor.fetchone()
     db.close()
     if rv :
@@ -53,7 +53,7 @@ def edit(rec_id):
     db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
                         cursorclass=MySQLdb.cursors.DictCursor)
     cursor = db.cursor()
-    cursor.execute("""SELECT * FROM Recipes WHERE recipeID=%s""", (rec_id))
+    cursor.execute("""SELECT * FROM Recipes WHERE recipeID='{0}'""".format(rec_id))
     rv = cursor.fetchone()
     db.close()
     if rv :
