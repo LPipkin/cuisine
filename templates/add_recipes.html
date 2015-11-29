@@ -12,7 +12,7 @@
     <div id="main">
     <h1>Recipe Master</h1>
     <p>SUBMIT RECIPE</p>
-    <form id="vtable" action="{{ url_for('submit') }}" method="GET"><table><tr>
+    <form id="vtable" action="{{ url_for('submitEdited') }}" method="GET"><table><tr>
         <th class="headcoil">Title</th>
         <td class="tailcol"><textarea name="name" rows="1" cols="75"></textarea></td></tr>
         <th class="headcoil">Diet</th>
@@ -20,12 +20,14 @@
         <th class="headcoil">Description</th>
         <td class="tailcol"><textarea name="desc" rows="6" cols="75"></textarea></td></tr>
         <th class="headcoil">Ingredients</th>
-        <td class="tailcol"><textarea name="ingr" rows="6" cols="75"></textarea></td></tr>
+        <td class="tailcol">
+            <textarea name="ingr" rows="6" cols="75" placeholder="measurment: ingredient">
+            </textarea></td></tr>
         <th class="headcoil">Instructions</th>
         <td class="tailcol"><textarea name="inst" rows="10" cols="75"></textarea></td></tr>
     </table>
     <input type="submit" value="submit" name="sub">
-    <input type="submit" value="cancel" name="cancel">
+    <input type="submit" value="cancel" name="can">
     </form>
     <footer id="footer"></footer>
     </div>

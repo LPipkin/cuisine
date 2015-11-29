@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 app = Flask(__name__)
 import MySQLdb
 import MySQLdb.cursors
+import string
 import gc
 gc.collect()
 
@@ -61,12 +62,38 @@ def edit(rec_id):
     else:
         return "error"
 
+@app.route('/edited', methods=['GET', 'POST'])
+def edited():
+    if request.method == "GET":
+        if request.args['sub'] == "submit":
+            nam = request.args['name']
+            die = request.args["diet"]
+            des = request.args["desc"]
+            ing = request.args["ingr"]
+            ins = request.args["inst"]
+            rID = request.args["rID"]
+            db = MySQLdb.Connection(host="localhost", user="root", db="cuisineRecipes",
+                cursorclass=MySQLdb.cursors.DictCursor)
+            cursor = db.cursor()
+            cursor.execute("""UPDATE Recipes SET name='{0}', diet='{1}', description='{2}', 
+                ingredients='{3}', instructions='{4}' WHERE recipeID='{5}'"""
+                .format(nam, die, des, ing, ins, rID))
+            db.commit()
+            cursor.execute("""SELECT * FROM Recipes WHERE recipeID='{0}'""".format(rID))
+            rv = cursor.fetchone()
+            db.close()
+            return render_template('view_recipes.html', rec=rID, rv=rv)
+        else:
+            return render_template('index.html')
+    else:
+        return render_template('index.html')
+
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     return render_template('add_recipes.html')
 
-@app.route('/submit', methods=['GET', 'POST'])
-def submit():
+@app.route('/submitedited', methods=['GET', 'POST'])
+def submitEdited():
     if request.method == "GET":
         if request.args['sub'] == "submit":
             nam = request.args['name']
@@ -95,7 +122,7 @@ def submit():
             rec_id = rv["recipeID"]
             db.close()
             return render_template('view_recipes.html', rec=rec_id, rv=rv)
-        else:
+        if request.args["can"] == "cancel":
             return render_template('index.html')
     else:
         return render_template('search.html')

@@ -15,17 +15,21 @@
 
 
   <table><tr>
+    <form id="vtable" action="{{ url_for('edit', rec_id=rv["recipeID"]) }}" method="GET"><table><tr>
       <th class="headcoil">Title</th>
-      <td class="tailcol"><textarea readonly rows="1" cols="75">{{ rv["name"] }}</textarea></td></tr>
+      <td class="tailcol"><textarea name="name" readonly rows="1" cols="75">{{ rv["name"] }}</textarea></td></tr>
       <th class="headcoil">Diet</th>
-      <td class="tailcol"><textarea readonly rows="1" cols="75">{{ rv["diet"] }}</textarea></td></tr>
+      <td class="tailcol"><textarea name="diet" readonly rows="1" cols="75">{{ rv["diet"] }}</textarea></td></tr>
       <th class="headcoil">Description</th>
-      <td class="tailcol"><textarea readonly rows="4" cols="75">{{ rv["description"] }}</textarea></td></tr>
+      <td class="tailcol"><textarea name="desc" readonly rows="4" cols="75">{{ rv["description"] }}</textarea></td></tr>
       <th class="headcoil">Ingredients</th>
-      <td class="tailcol"><textarea readonly rows="6" cols="75">{{ rv["ingredients"] }}</textarea></td></tr>
+      <td class="tailcol"><textarea name="ingr" readonly rows="6" cols="75">{{ rv["ingredients"] }}</textarea></td></tr>
       <th class="headcoil">Instructions</th>
-      <td class="tailcol"><textarea readonly rows="10" cols="75">{{ rv["instructions"] }}</textarea></td></tr>
+      <td class="tailcol"><textarea name="inst" readonly rows="10" cols="75">{{ rv["instructions"] }}</textarea></td></tr>
     </table>
+    <input type="hidden" name="rID" value="{{ rv["recipeID"] }}" >
+    <input type="submit" value="edit" name="edi">
+    </form>
   <footer id="footer"></footer>
   </div>
 
