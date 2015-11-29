@@ -126,11 +126,8 @@ def edited():
             for j in ingr_list:
                 lst.append(''.join(j))
             for i in lst:
-                cursor.execute("""SELECT * FROM Diets WHERE name='{0}'""".format(die))
-                rv = cursor.fetchone()
-                if rv is None:
-                    cursor.execute("""INSERT INTO Ingredients(name) VALUES('{0}')""".format(i))
-                    db.commit()
+                cursor.execute("""INSERT INTO Ingredients(name) VALUES('{0}')""".format(i))
+            db.commit()
             cursor.execute("""SELECT * FROM Recipes WHERE recipeID='{0}'""".format(rID))
             rv = cursor.fetchone()
             db.close()
@@ -185,11 +182,8 @@ def submitEdited():
             for j in ingr_list:
                 lst.append(''.join(j))
             for i in lst:
-                cursor.execute("""SELECT * FROM Diets WHERE name='{0}'""".format(die))
-                rv = cursor.fetchone()
-                if rv is None:
-                    cursor.execute("""INSERT INTO Ingredients(name) VALUES('{0}')""".format(i))
-                    db.commit()
+                cursor.execute("""INSERT INTO Ingredients(name) VALUES('{0}')""".format(i))
+            db.commit()
             # go to view of new entry
             cursor.execute("""SELECT * FROM Recipes WHERE instructions='{0}'""".format(ins))
             rv = cursor.fetchone()
