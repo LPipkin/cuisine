@@ -10,17 +10,6 @@ gc.collect()
 def index():
     return render_template('index.html')
 
-@app.route('/my-link/')
-def my_link():
-    db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
-                        cursorclass=MySQLdb.cursors.DictCursor)
-    cursor = db.cursor()
-    diet = "3"
-    cursor.execute("""SELECT * FROM Diets WHERE dietID='{0}'""".format(diet))
-    rv = cursor.fetchall()
-    db.close()
-    return rv[0]['name']
-
 @app.route('/home')
 def home():
     return '<h1>Hello, Home!!!</h1>'
@@ -120,6 +109,28 @@ def edited():
                 ingredients='{3}', instructions='{4}' WHERE recipeID='{5}'"""
                 .format(nam, die, des, ing, ins, rID))
             db.commit()
+            # insert into ingredients table
+            ingredient_list = ing.rstrip().split('\n')
+            ingr_list = []
+            for i in ingredient_list:
+                if ":" not in i:
+                    ingr_list.append(i)
+                else:
+                    ing_index = i.index(':')
+                    ing = i[ing_index:]
+                    ing_list = list(ing)
+                    ing_list.remove(':')
+                    ing_list.remove(" ")
+                    ingr_list.append(ing_list)
+            lst = []
+            for j in ingr_list:
+                lst.append(''.join(j))
+            for i in lst:
+                cursor.execute("""SELECT * FROM Diets WHERE name='{0}'""".format(die))
+                rv = cursor.fetchone()
+                if rv is None:
+                    cursor.execute("""INSERT INTO Ingredients(name) VALUES('{0}')""".format(i))
+                    db.commit()
             cursor.execute("""SELECT * FROM Recipes WHERE recipeID='{0}'""".format(rID))
             rv = cursor.fetchone()
             db.close()
@@ -157,6 +168,28 @@ def submitEdited():
                 VALUES('{0}', '{1}', '{2}', '{3}', '{4}')"""
                 .format(nam, die, des, ing, ins))
             db.commit()
+            # insert into ingredients table
+            ingredient_list = ing.rstrip().split('\n')
+            ingr_list = []
+            for i in ingredient_list:
+                if ":" not in i:
+                    ingr_list.append(i)
+                else:
+                    ing_index = i.index(':')
+                    ing = i[ing_index:]
+                    ing_list = list(ing)
+                    ing_list.remove(':')
+                    ing_list.remove(" ")
+                    ingr_list.append(ing_list)
+            lst = []
+            for j in ingr_list:
+                lst.append(''.join(j))
+            for i in lst:
+                cursor.execute("""SELECT * FROM Diets WHERE name='{0}'""".format(die))
+                rv = cursor.fetchone()
+                if rv is None:
+                    cursor.execute("""INSERT INTO Ingredients(name) VALUES('{0}')""".format(i))
+                    db.commit()
             # go to view of new entry
             cursor.execute("""SELECT * FROM Recipes WHERE instructions='{0}'""".format(ins))
             rv = cursor.fetchone()
