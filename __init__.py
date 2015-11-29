@@ -7,7 +7,6 @@ gc.collect()
 
 @app.route('/')
 def index():
-    #return rv[0]['name']
     return render_template('index.html')
 
 @app.route('/my-link/')
@@ -25,21 +24,44 @@ def my_link():
 def home():
     return '<h1>Hello, Home!!!</h1>'
 
-@app.route('/search')
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     #return '<h1>Hello, Search!!!</h1>'
     return render_template('search.html')
 
-@app.route('/view/<int:rec_id>')
+@app.route('/search/results', methods=['GET', 'POST'])
+def searchResults():
+    return render_template('searchResults.html')
+
+@app.route('/view/<int:rec_id>', methods=['GET', 'POST'])
 def view(rec_id):
-    return render_template('view.html', rec=rec_id)
+    rec_id = str(rec_id)
+    db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
+                        cursorclass=MySQLdb.cursors.DictCursor)
+    cursor = db.cursor()
+    cursor.execute("""SELECT * FROM Recipes WHERE recipeID=%s""", (rec_id))
+    rv = cursor.fetchone()
+    db.close()
+    if rv :
+        return render_template('view_recipes.html', rec=rec_id, rv=rv)
+    else:
+        return "error"
 
-@app.route('/edit/<int:rec_id>')
+@app.route('/edit/<int:rec_id>', methods=['GET', 'POST'])
 def edit(rec_id):
-    #return '<h1>Hello, Edit!!!</h1>'
-    return render_template('edit.html')
+    rec_id = str(rec_id)
+    db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
+                        cursorclass=MySQLdb.cursors.DictCursor)
+    cursor = db.cursor()
+    cursor.execute("""SELECT * FROM Recipes WHERE recipeID=%s""", (rec_id))
+    rv = cursor.fetchone()
+    db.close()
+    if rv :
+        return render_template('edit_recipes.html', rec=rec_id, rv=rv)
+    else:
+        return "error"
 
-@app.route('/submit')
+@app.route('/submit', methods=['GET', 'POST'])
 def submit():
     #return '<h1>Hello, View!!!</h1>'
     return render_template('submit.html')

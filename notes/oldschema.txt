@@ -32,7 +32,7 @@ CREATE TABLE `RecipeIngredients` (
   KEY `ingredientID` (`ingredientID`),
   CONSTRAINT `recipeingredients_ibfk_1` FOREIGN KEY (`recipeID`) REFERENCES `Recipes` (`recipeID`),
   CONSTRAINT `recipeingredients_ibfk_2` FOREIGN KEY (`ingredientID`) REFERENCES `Ingredients` (`ingredientID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Recipes` (
   `recipeID` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -41,10 +41,30 @@ CREATE TABLE `Recipes` (
   `diet` varchar(42) NOT NULL DEFAULT 'No Restrictions',
   `servings` int(11) DEFAULT NULL,
   `ingredients` mediumtext,
-  `intructions` mediumtext,
   PRIMARY KEY (`recipeID`),
   KEY `diet` (`diet`),
   FULLTEXT KEY `belongs_to` (`name`),
   CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`diet`) REFERENCES `Diets` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `RecipeSteps` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `recipeID` int(11) unsigned NOT NULL,
+  `stepID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `recipeID` (`recipeID`,`stepID`),
+  KEY `stepID` (`stepID`),
+  CONSTRAINT `recipesteps_ibfk_1` FOREIGN KEY (`recipeID`) REFERENCES `Recipes` (`recipeID`),
+  CONSTRAINT `recipesteps_ibfk_2` FOREIGN KEY (`stepID`) REFERENCES `Steps` (`stepID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Steps` (
+  `stepID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `recipeID` int(11) unsigned NOT NULL,
+  `instruction` mediumtext,
+  `stepNumber` int(11) DEFAULT NULL,
+  PRIMARY KEY (`stepID`),
+  KEY `recipeID` (`recipeID`),
+  CONSTRAINT `steps_ibfk_1` FOREIGN KEY (`recipeID`) REFERENCES `Recipes` (`recipeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
