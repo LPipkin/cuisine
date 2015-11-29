@@ -27,50 +27,53 @@ def home():
 
 @app.route('/search/', methods=['GET', 'POST'])
 def search():
-    #g = request.form['general']
-    #d = request.form['diet']
-    g = "can"
-    d = None
-    #if g == "Null":
-    #    g = None
-    #if d == "Null":
-    #    d = None
-    if g is None and d is None:
-        db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
-            cursorclass=MySQLdb.cursors.DictCursor)
-        cursor = db.cursor()
-        cursor.execute("""SELECT * FROM Recipes""")
-        rv = cursor.fetchall()
-        db.close()
-        return render_template('search.html', rv=rv, methods=['GET', 'POST'])
-    elif g is None:
-        db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
+    if request.method == 'POST':
+        g = request.form['general']
+        d = request.form['diet']
+        #g = "can"
+        #d = None
+        if g == "Null":
+            g = None
+        if d == "Null":
+            d = None
+        if g is None and d is None:
+            db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
                 cursorclass=MySQLdb.cursors.DictCursor)
-        cursor = db.cursor()
-        cursor.execute("""SELECT * FROM Recipes WHERE diet='{0}'""".format(d))
-        rv = cursor.fetchall()
-        db.close()
-        return render_template('search.html', rv=rv, methods=['GET', 'POST'])
-    elif d is None:
-        db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
+            cursor = db.cursor()
+            cursor.execute("""SELECT * FROM Recipes""")
+            rv = cursor.fetchall()
+            db.close()
+            return render_template('search.html', rv=rv, methods=['GET', 'POST'])
+        elif g is None:
+            db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
                 cursorclass=MySQLdb.cursors.DictCursor)
-        cursor = db.cursor()
-        cursor.execute("""SELECT * FROM Recipes WHERE 
+            cursor = db.cursor()
+            cursor.execute("""SELECT * FROM Recipes WHERE diet='{0}'""".format(d))
+            rv = cursor.fetchall()
+            db.close()
+            return render_template('search.html', rv=rv, methods=['GET', 'POST'])
+        elif d is None:
+            db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
+                cursorclass=MySQLdb.cursors.DictCursor)
+            cursor = db.cursor()
+            cursor.execute("""SELECT * FROM Recipes WHERE 
                 name LIKE '%{0}%' OR ingredients LIKE '%{0}%' 
                 OR description LIKE '%{0}%'""".format(g))
-        rv = cursor.fetchall()
-        db.close()
-        return render_template('search.html', rv=rv, methods=['GET', 'POST'])
-    else:
-        db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
+            rv = cursor.fetchall()
+            db.close()
+            return render_template('search.html', rv=rv, methods=['GET', 'POST'])
+        else:
+            db = MySQLdb.connect(host="localhost", user="root", db="cuisineRecipes",
                 cursorclass=MySQLdb.cursors.DictCursor)
-        cursor = db.cursor()
-        cursor.execute("""SELECT * FROM Recipes WHERE diet='{0}' AND 
+            cursor = db.cursor()
+            cursor.execute("""SELECT * FROM Recipes WHERE diet='{0}' AND 
                 (name LIKE '%{1}%' OR ingredients LIKE '%{1}%' OR 
                 description LIKE '%{1}%')""".format(d, g))
-        rv = cursor.fetchall()
-        db.close()
-        return render_template('search.html', rv=rv, methods=['GET', 'POST'])
+            rv = cursor.fetchall()
+            db.close()
+            return render_template('search.html', rv=rv, methods=['GET', 'POST'])
+    else:
+        return render_template('search.html')
 
 @app.route('/view/<int:rec_id>', methods=['GET', 'POST'])
 def view(rec_id):
