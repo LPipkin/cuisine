@@ -14,24 +14,22 @@
     <p>VIEW RECIPES</p>
     <table><tr>
         <th class="headcoil">Title</th>
-        <td class="tailcol"><textarea rows="1" cols="75">{{ rv["name"] }}</textarea></td></tr>
+        <td class="tailcol"><textarea name="name" rows="1" cols="75"></textarea></td></tr>
         <th class="headcoil">Diet</th>
-        <td class="tailcol"><textarea rows="1" cols="75">{{ rv["diet"] }}</textarea></td></tr>
+        <td class="tailcol"><textarea name="diet" rows="1" cols="75"></textarea></td></tr>
         <th class="headcoil">Description</th>
-        <td class="tailcol"><textarea rows="6" cols="75">{{ rv["description"] }}</textarea></td></tr>
+        <td class="tailcol"><textarea name="desc" rows="6" cols="75"></textarea></td></tr>
         <th class="headcoil">Ingredients</th>
-        <td class="tailcol"><textarea rows="6" cols="75">{{ rv["ingredients"] }}</textarea></td></tr>
+        <td class="tailcol"><textarea name="ingr" rows="6" cols="75"></textarea></td></tr>
         <th class="headcoil">Instructions</th>
-        <td class="tailcol"><textarea rows="10" cols="75">{{ rv["instructions"] }}</textarea></td></tr>
+        <td class="tailcol"><textarea name="inst" rows="10" cols="75"></textarea></td></tr>
     </table>
     <form class="subut" method="post">
-    <input type="hidden" name="JID" value="{{ rv["recipeID"] }}" >
     <input type="submit" value="submit" name="submit">
     <input type="submit" value="cancel" name="cancel">
     </form>
     <footer id="footer"></footer>
     </div>
-
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

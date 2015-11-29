@@ -61,10 +61,10 @@ def edit(rec_id):
     else:
         return "error"
 
-@app.route('/submit', methods=['GET', 'POST'])
-def submit():
-    #return '<h1>Hello, View!!!</h1>'
-    return render_template('submit.html')
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    #
+    return render_template('add_recipes.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
