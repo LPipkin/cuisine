@@ -19,8 +19,6 @@ def search():
     if request.method == 'POST':
         g = request.form['general']
         d = request.form['diet']
-        #g = "can"
-        #d = None
         if g == "Null":
             g = None
         if d == "Null":
@@ -131,9 +129,8 @@ def edited():
             cursor.execute("""SELECT * FROM Recipes WHERE recipeID='{0}'""".format(rID))
             rv = cursor.fetchone()
             db.close()
-            return render_template('view_recipes.html', rec=rID, rv=rv)
-        else:
-        #elif request.args['new'] == "Make New":
+            #return render_template('view_recipes.html', rec=rID, rv=rv)
+        elif request.args['new'] == "MakeNew":
             nam = request.args['name']
             die = request.args["diet"]
             des = request.args["desc"]
@@ -169,10 +166,9 @@ def edited():
             cursor.execute("""SELECT * FROM Recipes WHERE name='{0}', diet='{1}', description='{2}',ingredients='{3}', instructions='{4}'""".format(nam, die, des, ing, ins))
             rv = cursor.fetchone()
             rID = rv["recipeID"]
+            rID = str(rID)
             db.close()
-            return render_template('view_recipes.html', rec=rID, rv=rv)
-    else:
-        return render_template('index.html')
+        return render_template('view_recipes.html', rec=rID, rv=rv)
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
