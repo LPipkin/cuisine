@@ -8,11 +8,11 @@ gc.collect()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('webpage.html')
 
 @app.route('/home')
 def home():
-    return '<h1>Hello, Home!!!</h1>'
+    return render_template('index.html')
 
 @app.route('/search/', methods=['GET', 'POST'])
 def search():
@@ -133,7 +133,44 @@ def edited():
             db.close()
             return render_template('view_recipes.html', rec=rID, rv=rv)
         else:
-            return render_template('index.html')
+        #elif request.args['new'] == "Make New":
+            nam = request.args['name']
+            die = request.args["diet"]
+            des = request.args["desc"]
+            ing = request.args["ingr"]
+            ins = request.args["inst"]
+            db = MySQLdb.Connection(host="localhost", user="root", db="cuisineRecipes",
+                cursorclass=MySQLdb.cursors.DictCursor)
+            cursor = db.cursor()
+            cursor.execute("""INSERT INTO
+                Recipes(name, diet, description, ingredients, instructions)
+                VALUES('{0}', '{1}', '{2}', '{3}', '{4}')"""
+                .format(nam, die, des, ing, ins))
+            db.commit()
+            # insert into ingredients table
+            ingredient_list = ing.rstrip().split('\n')
+            ingr_list = []
+            for i in ingredient_list:
+                if ":" not in i:
+                    ingr_list.append(i)
+                else:
+                    ing_index = i.index(':')
+                    ing = i[ing_index:]
+                    ing_list = list(ing)
+                    ing_list.remove(':')
+                    ing_list.remove(" ")
+                    ingr_list.append(ing_list)
+            lst = []
+            for j in ingr_list:
+                lst.append(''.join(j))
+            for i in lst:
+                cursor.execute("""INSERT INTO Ingredients(name) VALUES('{0}')""".format(i))
+            db.commit()
+            cursor.execute("""SELECT * FROM Recipes WHERE name='{0}', diet='{1}', description='{2}',ingredients='{3}', instructions='{4}'""".format(nam, die, des, ing, ins))
+            rv = cursor.fetchone()
+            rID = rv["recipeID"]
+            db.close()
+            return render_template('view_recipes.html', rec=rID, rv=rv)
     else:
         return render_template('index.html')
 
@@ -190,7 +227,7 @@ def submitEdited():
             rec_id = rv["recipeID"]
             db.close()
             return render_template('view_recipes.html', rec=rec_id, rv=rv)
-        if request.args["can"] == "cancel":
+        elif request.args["con"] == "cancel":
             return render_template('index.html')
     else:
         return render_template('search.html')
